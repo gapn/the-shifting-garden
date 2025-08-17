@@ -7,6 +7,7 @@ const hexRadius = 2;
 const gameState = {
     grid: createGridData(hexRadius),
     selectedHexId: null,
+    timer: timerInSeconds,
 };
 
 // Grid & Hex Logic
@@ -107,4 +108,25 @@ document.getElementById('game-container').addEventListener('click', (event) => {
     handleHexClick(clickedHex);
 });
 
+// Timer
+function renderTimer() {
+    const timerElement = document.getElementById('timer-display');
+    timerElement.textContent = `Time: ${gameState.timer}`
+}
 
+function advanceTurn() {
+    console.log('A new turn begins');
+    gameState.timer = timerInSeconds;
+}
+
+function gameLoop() {
+    renderTimer();
+    gameState.timer--;
+    if (gameState.timer < 0) {
+        advanceTurn();
+    }
+}
+
+
+
+setInterval(gameLoop, 1000);

@@ -35,8 +35,8 @@
 
 ## 📊 MVP Progress Tracker
 
--   [✅] **1. Grid System:** Setup the 19-tile hexagonal grid.
--   [ ] **2. Game Loop:** Implement the 10-second placement timer and turn structure.
+-   [x] **1. Grid System:** Setup the 19-tile hexagonal grid.
+-   [x] **2. Game Loop:** Implement the 10-second placement timer and turn structure.
 -   [ ] **3. Sun & Shadow:** Code the sun's rotation and the shadow-casting logic.
 -   [ ] **4. Plant System:** Create the data structure for plants and a simple inventory.
 -   [ ] **5. Scoring Logic:** Implement pathfinding for the gardener and the main scoring function.
