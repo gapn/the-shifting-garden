@@ -49,3 +49,39 @@ h1 {
     margin-bottom: 10px;
     font-size: 1.5em;
 }
+
+.plant-element {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.plant-element.selected-inventory {
+    background-color: #f1c40f;
+    color: black;
+}
+
+.plant {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #e67e22;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(0,0,0,0.5);
+}
+
+.plant.sunflower {
+    background-color: #f1c40f;
+}
+
+.plant.lavender {
+    background-color: #8825e3;
+}
+
+.plant.lotus {
+    background-color: #eb68b7;
+}

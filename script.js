@@ -4,10 +4,18 @@ const hexSizeInPixels = 50;
 const timerInSeconds = 10;
 const hexRadius = 2;
 
+const plantData = {
+    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA 🇺🇸', emoji: '🌻' },
+    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France 🇫🇷', emoji: '🪻' },
+    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China 🇨🇳', emoji: '🪷' },
+};
+
 const gameState = {
     grid: createGridData(hexRadius),
     selectedHexId: null,
     timer: timerInSeconds,
+    inventory: [{ ...plantData.sunflower }],
+    selectedInventoryIndex: null,
 };
 
 // Grid & Hex Logic
@@ -18,7 +26,7 @@ function createGridData(sideLengthMinusOne) {
             const s = -q -r;
             if (Math.abs(s) <= sideLengthMinusOne) {
                 const coordinateId = `${q},${r},${s}`;
-                gridData.push({ coordinateId, q, r, s});
+                gridData.push({ coordinateId, q, r, s, plant: null });
             }
         }
     }
@@ -58,11 +66,23 @@ function hexRound(frac) {
 
 function handleHexClick(clickedHex) {
     if (clickedHex) {
-        gameState.selectedHexId = clickedHex.coordinateId;
+        if (gameState.selectedInventoryIndex !== null) {
+            const plantToPlace = gameState.inventory[gameState.selectedInventoryIndex];
+            clickedHex.plant = { ...plantToPlace };
+
+            gameState.inventory.splice(gameState.selectedInventoryIndex, 1);
+            gameState.selectedInventoryIndex = null;
+
+            renderInventory();
+            renderGrid();
+        } else {
+            gameState.selectedHexId = clickedHex.coordinateId;
+            renderGrid();
+        }
     } else {
         gameState.selectedHexId = null;
+        renderGrid();
     }
-    renderGrid();
 }
 
 // Rendering
@@ -84,6 +104,13 @@ function renderGrid() {
             tile.classList.add('selected-hex');
         }
 
+        if (hex.plant) {
+            const plantDiv = document.createElement('div');
+            const plantClass = hex.plant.name.toLowerCase().replace(' ', '-');
+            plantDiv.className = `plant ${plantClass}`;
+            tile.appendChild(plantDiv);
+        }
+
         const offsetLeft = gridWidth / 2;
         const offsetTop = gridHeight / 2;
 
@@ -95,6 +122,7 @@ function renderGrid() {
 }
 
 renderGrid();
+renderInventory();
 
 document.getElementById('game-container').addEventListener('click', (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -125,6 +153,30 @@ function gameLoop() {
     if (gameState.timer < 0) {
         advanceTurn();
     }
+}
+
+// Inventory
+function renderInventory() {
+    const inventoryDisplay = document.getElementById('inventory-display');
+    inventoryDisplay.innerHTML = '';
+
+    gameState.inventory.forEach((plant, index) => {
+        const plantElement = document.createElement('div');
+        plantElement.textContent = plant.name;
+        plantElement.className = 'plant-element';
+
+        if (gameState.selectedInventoryIndex === index) {
+            plantElement.classList.add('selected-inventory');
+        }
+        plantElement.addEventListener('click', () => handleInventoryClick(index));
+        inventoryDisplay.appendChild(plantElement);
+    });
+}
+
+function handleInventoryClick(index) {
+    gameState.selectedInventoryIndex = index;
+
+    renderInventory();
 }
 
 
