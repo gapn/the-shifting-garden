@@ -18,7 +18,7 @@
 
 ## ✨ Key Features
 
-* **Hexagonal Grid:** A 19-tile hexagonal garden layout.
+* **Hexagonal Grid:** A 19-tile hexagonal garden layout. Based on [Red Blob Games - Hexagons](https://www.redblobgames.com/grids/hexagons/#pixel-to-hex).
 * **Dynamic Sunlight:** The sun rotates around the board each round, changing light and shadow values.
 * **Unique Plants:** Cultivate plants from around the world, each with its own needs and attributes.
 * **Score as Currency:** Use your score to buy new plants from the shop.
@@ -35,7 +35,7 @@
 
 ## 📊 MVP Progress Tracker
 
--   [ ] **1. Grid System:** Setup the 19-tile hexagonal grid.
+-   [✅] **1. Grid System:** Setup the 19-tile hexagonal grid.
 -   [ ] **2. Game Loop:** Implement the 10-second placement timer and turn structure.
 -   [ ] **3. Sun & Shadow:** Code the sun's rotation and the shadow-casting logic.
 -   [ ] **4. Plant System:** Create the data structure for plants and a simple inventory.

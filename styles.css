@@ -21,4 +21,26 @@ h1 {
 
 #game-container {
     border: 1px solid #ccc;
+    position: relative;
+}
+
+.hex-tile {
+    position: absolute;
+    width: 100px;  /* 2 * hexSizeInPixels */
+    height: 86.6px; /* sqrt(3) * hexSizeInPixels */
+    background-color: #6a8d73;
+    
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    
+    transform: translate(-50%, -50%);
+    
+    transition: background-color 0.2s ease;
+}
+
+.hex-tile:hover {
+    background-color: #8fbc8f;
+}
+
+.hex-tile.selected-hex {
+    background-color: #f1c40f;
 }
