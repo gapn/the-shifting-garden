@@ -311,9 +311,9 @@ function renderUI() {
 function advanceTurn() {
     gameState.turn++;
     console.log('A new turn begins');
-    if (gameState.turn > gameState.maxTurns) {
+    if (gameState.turn >= gameState.maxTurns) {
         clearInterval(gameInterval)
-        alert(`${game_over_score} ${game_over_score}: ${gameState.score}`);
+        alert(`${i18n.game_over_score} ${i18n.game_over_score}: ${gameState.score}`);
         return;
     }
 
@@ -347,13 +347,11 @@ function calculateScore() {
 
 function initializeUI() {
     document.querySelector('h1').textContent = i18n.ui_game_title;
-    // Assumes you have a <p> tag for the subtitle
     const subtitleElement = document.querySelector('p');
     if (subtitleElement) {
         subtitleElement.textContent = i18n.ui_game_subtitle;
     }
     
-    // Selects the <h2> inside each container
     document.querySelector('#shop-container h2').textContent = i18n.ui_shop;
     document.querySelector('#inventory-container h2').textContent = i18n.ui_inventory;
 }
@@ -415,13 +413,10 @@ function renderShop() {
     }
 }
 
-// This new function handles the entire language change process
 function changeLanguage(lang) {
     setLanguage(lang);
     initializeUI();
-    renderAll(); // Re-render dynamic components like shop and inventory
-
-    // Update the active button style
+    renderAll();
     document.querySelectorAll('#lang-switcher button').forEach(btn => {
         if (btn.dataset.lang === lang) {
             btn.classList.add('active');
@@ -431,7 +426,6 @@ function changeLanguage(lang) {
     });
 }
 
-// Add this event listener to the bottom of your script
 document.getElementById('lang-switcher').addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
         const lang = event.target.dataset.lang;
