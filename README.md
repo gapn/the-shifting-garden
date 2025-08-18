@@ -22,6 +22,7 @@
 * **Dynamic Sunlight:** The sun rotates around the board each round, changing light and shadow values.
 * **Unique Plants:** Cultivate plants from around the world, each with its own needs and attributes.
 * **Score as Currency:** Use your score to buy new plants from the shop.
+* **i18n:** Game is i18n ready.
 
 ---
 

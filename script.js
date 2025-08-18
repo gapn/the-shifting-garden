@@ -1,5 +1,79 @@
 'use strict';
 
+const translations = {
+    en: {
+        plant_sunflower_name: 'Sunflower',
+        plant_lavender_name: 'Lavender',
+        plant_shadow_fern_name: 'Shadow Fern',
+        plant_carniolan_lily_name: 'Carniolan Lily',
+        plant_bird_of_paradise_name: 'Bird of Paradise',
+        plant_kangaroo_paw_name: 'Kangaroo Paw',
+        ui_score: 'Score',
+        ui_time: 'Time',
+        ui_turn: 'Turn',
+        ui_shop: 'Shop',
+        ui_inventory: 'Inventory',
+        ui_game_title: 'The Shifting Garden',
+        ui_game_subtitle: 'Place plants to score points. The sun moves every 10 seconds!',
+        shop_cost: 'Cost',
+        game_over_title: 'Game Over!',
+        game_over_score: 'Final Score',
+        btn_start: 'Start Game',
+        btn_play_again: 'Play Again?',
+    },
+    sl: {
+        plant_sunflower_name: 'Sončnica',
+        plant_lavender_name: 'Sivka',
+        plant_shadow_fern_name: 'Senčna Praprot',
+        plant_carniolan_lily_name: 'Kranjska Lilija',
+        plant_bird_of_paradise_name: 'Rajska Ptica',
+        plant_kangaroo_paw_name: 'Kengurujeva Tačka',
+        ui_score: 'Točke',
+        ui_time: 'Čas',
+        ui_turn: 'Krog',
+        ui_shop: 'Trgovina',
+        ui_inventory: 'Inventar',
+        ui_game_title: 'Premikajoči se vrt',
+        ui_game_subtitle: 'Postavljaj rastline za točke. Sonce se premakne vsakih 10 sekund!',
+        shop_cost: 'Cena',
+        game_over_title: 'Konec igre!',
+        game_over_score: 'Končni rezultat',
+        btn_start: 'Začni igro',
+        btn_play_again: 'Igraj ponovno?',
+    },
+    es: {
+        plant_sunflower_name: 'Girasol',
+        plant_lavender_name: 'Lavanda',
+        plant_shadow_fern_name: 'Helecho de Sombra',
+        plant_carniolan_lily_name: 'Lirio de Carniola',
+        plant_bird_of_paradise_name: 'Ave del Paraíso',
+        plant_kangaroo_paw_name: 'Pata de Canguro',
+        ui_score: 'Puntuación',
+        ui_time: 'Tiempo',
+        ui_turn: 'Turno',
+        ui_shop: 'Tienda',
+        ui_inventory: 'Inventario',
+        ui_game_title: 'El Jardín Cambiante',
+        ui_game_subtitle: 'Coloca plantas para ganar puntos. ¡El sol se mueve cada 10 segundos!',
+        shop_cost: 'Coste',
+        game_over_title: '¡Juego terminado!',
+        game_over_score: 'Puntuación final',
+        btn_start: 'Empezar juego',
+        btn_play_again: '¿Jugar de nuevo?',
+    }
+};
+
+const i18n = {};
+
+function setLanguage(lang) {
+    if (translations[lang]) {
+        Object.assign(i18n, translations[lang]);
+        console.log(`Language set to: ${lang}`);
+    } else {
+        console.error(`Language not found: ${lang}`);
+    }
+}
+
 const hexSizeInPixels = 50;
 const timerInSeconds = 10;
 const hexRadius = 2;
@@ -7,12 +81,12 @@ const container = document.getElementById('game-container');
 let gameInterval = null;
 
 const plantData = {
-    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA', flag: '🇺🇸', emoji: '🌻', height: 2, lightNeed: 3 },
-    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France', flag: '🇫🇷', emoji: '🪻', height: 1, lightNeed: 3 },
-    'shadow-fern': { name: 'Shadow Fern', cost: 20, points: 12, origin: 'Japan', flag: '🇯🇵', emoji: '🌿', height: 1, lightNeed: 1 },
-    'carniolan-lily': { name: 'Carniolan Lily', cost: 25, points: 15, origin: 'Slovenia', flag: '🇸🇮', emoji: '🧡', height: 1, lightNeed: 2 },
-    'bird-of-paradise': { name: 'Bird of Paradise', cost: 30, points: 18, origin: 'South Africa', flag: '🇿🇦', emoji: '🌺', height: 2, lightNeed: 3 },
-    'kangaroo-paw': { name: 'Kangaroo Paw', cost: 15, points: 7, origin: 'Australia', flag: '🇦🇺', emoji: '🐾', height: 1, lightNeed: 3 },
+    'sunflower': { nameKey: 'plant_sunflower_name', type: 'sunflower', cost: 10, points: 5, emoji: '🌻', height: 2, lightNeed: 3, flag: '🇺🇸' },
+    'lavender': { nameKey: 'plant_lavender_name', type: 'lavender', cost: 15, points: 8, emoji: '🪻', height: 1, lightNeed: 3, flag: '🇫🇷' },
+    'shadow-fern': { nameKey: 'plant_shadow_fern_name', type: 'shadow-fern', cost: 20, points: 12, emoji: '🌿', height: 1, lightNeed: 1, flag: '🇯🇵' },
+    'carniolan-lily': { nameKey: 'plant_carniolan_lily_name', type: 'carniolan-lily', cost: 25, points: 15, emoji: '🧡', height: 1, lightNeed: 2, flag: '🇸🇮' },
+    'bird-of-paradise': { nameKey: 'plant_bird_of_paradise_name', type: 'bird-of-paradise', cost: 30, points: 18, emoji: '🌺', height: 2, lightNeed: 3, flag: '🇿🇦' },
+    'kangaroo-paw': { nameKey: 'plant_kangaroo_paw_name', type: 'kangaroo-paw', cost: 15, points: 7, emoji: '🐾', height: 1, lightNeed: 3, flag: '🇦🇺' },
 };
 
 const sunPositions = [
@@ -164,7 +238,7 @@ function renderGrid() {
 
         if (hex.plant) {
             const plantDiv = document.createElement('div');
-            const plantClass = hex.plant.name.toLowerCase().replace(' ', '-');
+            const plantClass = i18n[hex.plant.nameKey].toLowerCase().replace(' ', '-');
             plantDiv.className = `plant ${plantClass}`;
             plantDiv.textContent = hex.plant.emoji;
             tile.appendChild(plantDiv);
@@ -205,6 +279,9 @@ function renderAll() {
     renderSun();
 }
 
+//setLanguage('en');
+//initializeUI();
+changeLanguage('en');
 calculateLightLevels();
 renderAll();
 
@@ -228,9 +305,9 @@ function renderUI() {
 
     const currentRevolution = Math.floor(gameState.turn / sunPositions.length) + 1;
     
-    scoreElement.textContent = `Score: ${gameState.score}`;
-    timerElement.textContent = `Time: ${gameState.timer}`;
-    turnElement.textContent = `Turn: ${currentRevolution} / 3`;
+    scoreElement.textContent = `${i18n.ui_score}: ${gameState.score}`;
+    timerElement.textContent = `${i18n.ui_time}: ${gameState.timer}`;
+    turnElement.textContent = `${i18n.ui_turn}: ${currentRevolution} / 3`;
 }
 
 function advanceTurn() {
@@ -270,6 +347,19 @@ function calculateScore() {
     gameState.score += turnScore;
 }
 
+function initializeUI() {
+    document.querySelector('h1').textContent = i18n.ui_game_title;
+    // Assumes you have a <p> tag for the subtitle
+    const subtitleElement = document.querySelector('p');
+    if (subtitleElement) {
+        subtitleElement.textContent = i18n.ui_game_subtitle;
+    }
+    
+    // Selects the <h2> inside each container
+    document.querySelector('#shop-container h2').textContent = i18n.ui_shop;
+    document.querySelector('#inventory-container h2').textContent = i18n.ui_inventory;
+}
+
 // Inventory & Shop
 function renderInventory() {
     const inventoryDisplay = document.getElementById('inventory-display');
@@ -277,7 +367,7 @@ function renderInventory() {
 
     gameState.inventory.forEach((plant, index) => {
         const plantElement = document.createElement('div');
-        plantElement.textContent = `${plant.emoji} ${plant.name} ${plant.flag}`;
+        plantElement.textContent = `${plant.emoji} ${i18n[plant.nameKey]} ${plant.flag}`;
         plantElement.className = 'plant-element';
 
         if (gameState.selectedInventoryIndex === index) {
@@ -315,7 +405,7 @@ function renderShop() {
         const plant = plantData[plantType];
         const plantElement = document.createElement('div');
         plantElement.className = 'shop-item';
-        plantElement.textContent = `${plant.emoji} ${plant.name} ${plant.flag} (Cost: ${plant.cost})`;
+        plantElement.textContent = `${plant.emoji} ${i18n[plant.nameKey]} ${plant.flag} (${i18n.shop_cost}: ${plant.cost})`;
 
         if (gameState.score <plant.cost) {
             plantElement.classList.add('disabled');
@@ -327,5 +417,28 @@ function renderShop() {
     }
 }
 
+// This new function handles the entire language change process
+function changeLanguage(lang) {
+    setLanguage(lang);
+    initializeUI();
+    renderAll(); // Re-render dynamic components like shop and inventory
+
+    // Update the active button style
+    document.querySelectorAll('#lang-switcher button').forEach(btn => {
+        if (btn.dataset.lang === lang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+// Add this event listener to the bottom of your script
+document.getElementById('lang-switcher').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const lang = event.target.dataset.lang;
+        changeLanguage(lang);
+    }
+});
 
 gameInterval = setInterval(gameLoop, 1000);

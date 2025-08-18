@@ -165,3 +165,20 @@ h2 {
         max-width: 500px;
     }
 }
+
+#lang-switcher {
+    margin: 10px 0;
+    text-align: center;
+}
+
+#lang-switcher button {
+
+    font-size: 2em;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#lang-switcher button.active {
+    background-color: #f1c40f;
+}
