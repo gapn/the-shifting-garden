@@ -37,7 +37,7 @@
 
 -   [x] **1. Grid System:** Setup the 19-tile hexagonal grid.
 -   [x] **2. Game Loop:** Implement the 10-second placement timer and turn structure.
--   [ ] **3. Sun & Shadow:** Code the sun's rotation and the shadow-casting logic.
+-   [x] **3. Sun & Shadow:** Code the sun's rotation and the shadow-casting logic.
 -   [x] **4. Plant System:** Create the data structure for plants and a simple inventory.
 -   [ ] **5. Scoring Logic:** Implement pathfinding for the gardener and the main scoring function.
 -   [x] **6. Shop System:** Build a minimal UI to buy the 3 starter plants.

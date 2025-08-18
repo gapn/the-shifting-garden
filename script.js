@@ -3,20 +3,30 @@
 const hexSizeInPixels = 50;
 const timerInSeconds = 10;
 const hexRadius = 2;
+const container = document.getElementById('game-container');
 
 const plantData = {
-    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA', flag: '🇺🇸', emoji: '🌻' },
-    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France', flag: '🇫🇷', emoji: '🪻' },
-    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China', flag: '🇨🇳', emoji: '🪷' },
+    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA', flag: '🇺🇸', emoji: '🌻', height: 2, lightNeed: 3 },
+    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France', flag: '🇫🇷', emoji: '🪻', height: 1, lightNeed: 3 },
+    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China', flag: '🇨🇳', emoji: '🪷', height: 1, lightNeed: 2 },
+    'shadowFern': { name: 'Shadow Fern', cost: 20, points: 12, origin: 'Japan', flag: '🇯🇵', emoji: '🌿', height: 1, lightNeed: 1 },
 };
+
+const sunPositions = [
+    { q: 10, r: 0, s: -10 }, { q: 0, r: 10, s: -10 }, { q: -10, r: 10, s: 0 },
+    { q: -10, r: 0, s: 10 }, { q: 0, r: -10, s: 10 }, { q: 10, r: -10, s: 0 },
+];
+
+const lightLevels = { sun: 3, shadow: 1 };
 
 const gameState = {
     grid: createGridData(hexRadius),
     selectedHexId: null,
     timer: timerInSeconds,
     score: 25,
-    inventory: [{ ...plantData.sunflower }],
+    inventory: [{ ...plantData.sunflower }, { ...plantData.shadowFern}],
     selectedInventoryIndex: null,
+    sunPositionIndex: 0,
 };
 
 // Grid & Hex Logic
@@ -74,22 +84,64 @@ function handleHexClick(clickedHex) {
             gameState.inventory.splice(gameState.selectedInventoryIndex, 1);
             gameState.selectedInventoryIndex = null;
 
-            renderInventory();
-            renderGrid();
+            calculateLightLevels();
+            renderAll();
         } else {
             gameState.selectedHexId = clickedHex.coordinateId;
-            renderGrid();
+            renderAll();
         }
     } else {
         gameState.selectedHexId = null;
-        renderGrid();
+        renderAll();
     }
+}
+
+function hexDistance(a, b) {
+    return (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(a.s - b.s)) / 2;
+}
+
+function hexLinearInterpolation(a, b, t) {
+    return { q: a.q * (1 - t) + b.q * t, r: a.r * (1 - t) + b.r * t, s: a.s * (1 - t) + b.s * t };
+}
+
+function hexLineDraw(a, b) {
+    const dist = hexDistance(a, b);
+    const results = [];
+    if (dist === 0) return [a];
+    for (let i = 0; i <= dist; i++) {
+        results.push(hexRound(hexLinearInterpolation(a, b, (1.0 / dist) * i)));
+    }
+    return results;
+}
+
+// Shadows
+function calculateLightLevels() {
+    gameState.grid.forEach(hex => hex.lightLevel = lightLevels.sun);
+    const sunPos = sunPositions[gameState.sunPositionIndex];
+    
+    gameState.grid.forEach(tile => {
+        const lineToSun = hexLineDraw(tile, sunPos);
+        for (const hexOnLine of lineToSun) {
+            const gridHex = gameState.grid.find(h => h.coordinateId === `${hexOnLine.q},${hexOnLine.r},${hexOnLine.s}`);
+
+            if (gridHex && gridHex.plant && gridHex.coordinateId !== tile.coordinateId) {
+                if (gridHex.plant.height >= tile.plant?.height || !tile.plant) {
+                    tile.lightLevel = lightLevels.shadow;
+                    break;
+                }
+            }
+        }
+    });
 }
 
 // Rendering
 function renderGrid() {
-    const container = document.getElementById('game-container');
     container.innerHTML = '';
+
+    const sunIndicator = document.createElement('div');
+    sunIndicator.id = 'sun-indicator';
+    sunIndicator.textContent = '☀️';
+    container.appendChild(sunIndicator);
 
     const gridWidth = 5 * Math.sqrt(3) * hexSizeInPixels;
     const gridHeight = 3 * Math.sqrt(3) * hexSizeInPixels + 4 * hexSizeInPixels;
@@ -112,6 +164,10 @@ function renderGrid() {
             tile.appendChild(plantDiv);
         }
 
+        if (hex.lightLevel === lightLevels.shadow) {
+            tile.classList.add('shadow');
+        }
+
         const offsetLeft = gridWidth / 2;
         const offsetTop = gridHeight / 2;
 
@@ -122,9 +178,29 @@ function renderGrid() {
     });
 }
 
-renderGrid();
-renderInventory();
-renderShop();
+function renderSun() {
+    const sunIndicator = document.getElementById('sun-indicator');
+    const sunPos = sunPositions[gameState.sunPositionIndex];
+    const sunPixelPos = hexToPixel(sunPos);
+    const magnitude = Math.sqrt(sunPixelPos.x ** 2 + sunPixelPos.y ** 2);
+    const boardRadius = (container.offsetWidth / 2) * 0.9; 
+    const sunX = (sunPixelPos.x / magnitude) * boardRadius;
+    const sunY = (sunPixelPos.y / magnitude) * boardRadius;
+
+    sunIndicator.style.left = `${sunX + container.offsetWidth / 2}px`;
+    sunIndicator.style.top = `${sunY + container.offsetHeight / 2}px`;
+}
+
+function renderAll() {
+    renderGrid();
+    renderInventory();
+    renderShop();
+    renderUI();
+    renderSun();
+}
+
+calculateLightLevels();
+renderAll();
 
 document.getElementById('game-container').addEventListener('click', (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -149,16 +225,32 @@ function renderUI() {
 
 function advanceTurn() {
     console.log('A new turn begins');
+    gameState.sunPositionIndex = (gameState.sunPositionIndex + 1) % sunPositions.length;
+    calculateLightLevels();
+    calculateScore();
     gameState.timer = timerInSeconds;
+    renderAll();
 }
 
 function gameLoop() {
     gameState.timer--;
     if (gameState.timer < 0) {
         advanceTurn();
-        renderShop();
     }
     renderUI();
+}
+
+function calculateScore() {
+    let turnScore = 0;
+    gameState.grid.forEach(hex => {
+        if (hex.plant) {
+            if (hex.lightLevel >= hex.plant.lightNeed) {
+                turnScore += hex.plant.points;
+            }
+        }
+    });
+    console.log(`Scored ${turnScore} points this turn.`);
+    gameState.score += turnScore;
 }
 
 // Inventory & Shop

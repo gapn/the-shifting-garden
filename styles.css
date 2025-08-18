@@ -55,7 +55,7 @@ h1 {
 }
 
 #shop-container {
-    margin-top: 20px;
+    margin-top: 50px;
 }
 .plant-element {
     border: 1px solid black;
@@ -93,6 +93,10 @@ h1 {
     background-color: #eb68b7;
 }
 
+.plant.shadowFern {
+    background-color: #07460d;
+}
+
 .shop-item {
     border: 1px solid black;
     padding: 5px;
@@ -104,4 +108,16 @@ h1 {
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
+}
+
+.hex-tile.shadow {
+    background-color: #4a684f;
+}
+
+#sun-indicator {
+    position: absolute;
+    font-size: 20rem;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 0 5px #f1c40f);
+    transition: all 0.5s ease-in-out;
 }
