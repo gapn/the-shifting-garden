@@ -279,8 +279,6 @@ function renderAll() {
     renderSun();
 }
 
-//setLanguage('en');
-//initializeUI();
 changeLanguage('en');
 calculateLightLevels();
 renderAll();
@@ -315,7 +313,7 @@ function advanceTurn() {
     console.log('A new turn begins');
     if (gameState.turn > gameState.maxTurns) {
         clearInterval(gameInterval)
-        alert(`Game Over! Final Score: ${gameState.score}`);
+        alert(`${game_over_score} ${game_over_score}: ${gameState.score}`);
         return;
     }
 
