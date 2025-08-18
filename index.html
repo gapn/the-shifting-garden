@@ -7,18 +7,27 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-    <h1>The Shifting Garden</h1>
-    <div id="score-display">Score: 25</div>
-    <div id="timer-display">Time: 10</div>
-    <div id="game-container"></div>
-    <div id="shop-container">
-        <h2>Shop</h2>
-        <div id="shop-display"></div>
-    </div>
-    <div id="inventory-container">
-        <h2>Inventory</h2>
-        <div id="inventory-display"></div>
+    <div id="app-container">
+        <div id="main-display">
+            <h1>The Shifting Garden</h1>
+            <p>Place plants to score points. The sun moves every 10 seconds!</p>
+            <div id="game-stats"> 
+                <div id="score-display" class="stat-box">Score: 25</div>
+                <div id="turn-display" class="stat-box">Turn: 1 / 3</div>
+                <div id="timer-display" class="stat-box">Time: 10</div>
+            </div>
+            <div id="game-container"></div>
+        </div>
+        <div id="right-panel">
+            <div id="shop-container">
+                <h2>Shop</h2>
+                <div id="shop-display"></div>
+            </div>
+            <div id="inventory-container">
+                <h2>Inventory</h2>
+                <div id="inventory-display"></div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

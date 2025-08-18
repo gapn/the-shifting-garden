@@ -1,27 +1,65 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; 
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 body {
-    font-family: sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: 'Poppins', sans-serif;
     min-height: 100vh;
-    text-align: center;
-    flex-direction: column;
+    color: #ecf0f1;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url('assets/garden.jpg');
 }
 
 h1 {
+    margin-top: 2rem;
     margin-bottom: 20px;
+    color: #f1c40f;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+h2 {
+    margin-left: 10px;
+    color: #f1c40f;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    width: 100%;
+}
+
+#main-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #game-container {
-    border: 1px solid #ccc;
     position: relative;
+    margin-top: 5rem;
+}
+
+#game-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.stat-box {
+    background-color: #ddd;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    min-width: 150px;
 }
 
 .hex-tile {
@@ -29,6 +67,7 @@ h1 {
     width: 100px;  /* 2 * hexSizeInPixels */
     height: 86.6px; /* sqrt(3) * hexSizeInPixels */
     background-color: #6a8d73;
+    border: 1px dotted black;
     
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
     
@@ -41,24 +80,25 @@ h1 {
     background-color: #8fbc8f;
 }
 
-.hex-tile.selected-hex {
-    background-color: #f1c40f;
-}
-
 #timer-display {
-    margin-bottom: 10px;
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 #inventory-container {
     margin-top: 20px;
+    border: 1px solid white;
+    border-radius: 10px;
 }
 
 #shop-container {
     margin-top: 50px;
+    border: 1px solid white;
+    border-radius: 10px;
 }
 .plant-element {
-    border: 1px solid black;
+    border: 1px solid grey;
+    background-color: rgba(128, 128, 128, 0.481);
+    border-radius: 10px;
     padding: 5px;
     margin: 2px;
     cursor: pointer;
@@ -70,43 +110,35 @@ h1 {
 }
 
 .plant {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #e67e22;
+    font-size: 3em;
+    text-align: center;
+    line-height: 1;
+
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
+    
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid rgba(0,0,0,0.5);
 }
 
-.plant.sunflower {
-    background-color: #f1c40f;
-}
-
-.plant.lavender {
-    background-color: #8825e3;
-}
-
-.plant.lotus {
-    background-color: #eb68b7;
-}
-
-.plant.shadowFern {
-    background-color: #07460d;
-}
 
 .shop-item {
-    border: 1px solid black;
+    border: 1px solid grey;
+    background-color: rgba(128, 128, 128, 0.481);
+    border-radius: 10px;
     padding: 5px;
     margin: 2px;
     cursor: pointer;
 }
 
 .shop-item.disabled {
-    background-color: #ccc;
-    color: #666;
+    background-color: #ff000053;
+    color: white;
     cursor: not-allowed;
 }
 
@@ -116,8 +148,20 @@ h1 {
 
 #sun-indicator {
     position: absolute;
-    font-size: 20rem;
+    font-size: 15rem;
     transform: translate(-50%, -50%);
     filter: drop-shadow(0 0 5px #f1c40f);
     transition: all 0.5s ease-in-out;
+    z-index: -1;
+}
+
+@media (max-width: 800px) {
+    #app-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .left-panel, .right-panel {
+        width: 100%;
+        max-width: 500px;
+    }
 }

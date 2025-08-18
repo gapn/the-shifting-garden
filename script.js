@@ -4,12 +4,15 @@ const hexSizeInPixels = 50;
 const timerInSeconds = 10;
 const hexRadius = 2;
 const container = document.getElementById('game-container');
+let gameInterval = null;
 
 const plantData = {
     'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA', flag: '🇺🇸', emoji: '🌻', height: 2, lightNeed: 3 },
     'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France', flag: '🇫🇷', emoji: '🪻', height: 1, lightNeed: 3 },
-    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China', flag: '🇨🇳', emoji: '🪷', height: 1, lightNeed: 2 },
-    'shadowFern': { name: 'Shadow Fern', cost: 20, points: 12, origin: 'Japan', flag: '🇯🇵', emoji: '🌿', height: 1, lightNeed: 1 },
+    'shadow-fern': { name: 'Shadow Fern', cost: 20, points: 12, origin: 'Japan', flag: '🇯🇵', emoji: '🌿', height: 1, lightNeed: 1 },
+    'carniolan-lily': { name: 'Carniolan Lily', cost: 25, points: 15, origin: 'Slovenia', flag: '🇸🇮', emoji: '🧡', height: 1, lightNeed: 2 },
+    'bird-of-paradise': { name: 'Bird of Paradise', cost: 30, points: 18, origin: 'South Africa', flag: '🇿🇦', emoji: '🌺', height: 2, lightNeed: 3 },
+    'kangaroo-paw': { name: 'Kangaroo Paw', cost: 15, points: 7, origin: 'Australia', flag: '🇦🇺', emoji: '🐾', height: 1, lightNeed: 3 },
 };
 
 const sunPositions = [
@@ -24,9 +27,11 @@ const gameState = {
     selectedHexId: null,
     timer: timerInSeconds,
     score: 25,
-    inventory: [{ ...plantData.sunflower }, { ...plantData.shadowFern}],
+    inventory: [{ ...plantData["carniolan-lily"] }],
     selectedInventoryIndex: null,
     sunPositionIndex: 0,
+    turn: 0,
+    maxTurns: 18,
 };
 
 // Grid & Hex Logic
@@ -161,6 +166,7 @@ function renderGrid() {
             const plantDiv = document.createElement('div');
             const plantClass = hex.plant.name.toLowerCase().replace(' ', '-');
             plantDiv.className = `plant ${plantClass}`;
+            plantDiv.textContent = hex.plant.emoji;
             tile.appendChild(plantDiv);
         }
 
@@ -218,13 +224,24 @@ document.getElementById('game-container').addEventListener('click', (event) => {
 function renderUI() {
     const scoreElement = document.getElementById('score-display');
     const timerElement = document.getElementById('timer-display');
+    const turnElement = document.getElementById('turn-display');
+
+    const currentRevolution = Math.floor(gameState.turn / sunPositions.length) + 1;
     
     scoreElement.textContent = `Score: ${gameState.score}`;
     timerElement.textContent = `Time: ${gameState.timer}`;
+    turnElement.textContent = `Turn: ${currentRevolution} / 3`;
 }
 
 function advanceTurn() {
+    gameState.turn++;
     console.log('A new turn begins');
+    if (gameState.turn > gameState.maxTurns) {
+        clearInterval(gameInterval)
+        alert(`Game Over! Final Score: ${gameState.score}`);
+        return;
+    }
+
     gameState.sunPositionIndex = (gameState.sunPositionIndex + 1) % sunPositions.length;
     calculateLightLevels();
     calculateScore();
@@ -260,7 +277,7 @@ function renderInventory() {
 
     gameState.inventory.forEach((plant, index) => {
         const plantElement = document.createElement('div');
-        plantElement.textContent = plant.name;
+        plantElement.textContent = `${plant.emoji} ${plant.name} ${plant.flag}`;
         plantElement.className = 'plant-element';
 
         if (gameState.selectedInventoryIndex === index) {
@@ -311,4 +328,4 @@ function renderShop() {
 }
 
 
-setInterval(gameLoop, 1000);
+gameInterval = setInterval(gameLoop, 1000);
