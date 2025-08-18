@@ -5,15 +5,16 @@ const timerInSeconds = 10;
 const hexRadius = 2;
 
 const plantData = {
-    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA 🇺🇸', emoji: '🌻' },
-    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France 🇫🇷', emoji: '🪻' },
-    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China 🇨🇳', emoji: '🪷' },
+    'sunflower': { name: 'Sunflower', cost: 10, points: 5, origin: 'USA', flag: '🇺🇸', emoji: '🌻' },
+    'lavender': { name: 'Lavender', cost: 15, points: 8, origin: 'France', flag: '🇫🇷', emoji: '🪻' },
+    'lotus': { name: 'Lotus Flower', cost: 20, points: 12, origin: 'China', flag: '🇨🇳', emoji: '🪷' },
 };
 
 const gameState = {
     grid: createGridData(hexRadius),
     selectedHexId: null,
     timer: timerInSeconds,
+    score: 25,
     inventory: [{ ...plantData.sunflower }],
     selectedInventoryIndex: null,
 };
@@ -123,6 +124,7 @@ function renderGrid() {
 
 renderGrid();
 renderInventory();
+renderShop();
 
 document.getElementById('game-container').addEventListener('click', (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -136,10 +138,13 @@ document.getElementById('game-container').addEventListener('click', (event) => {
     handleHexClick(clickedHex);
 });
 
-// Timer
-function renderTimer() {
+// UI
+function renderUI() {
+    const scoreElement = document.getElementById('score-display');
     const timerElement = document.getElementById('timer-display');
-    timerElement.textContent = `Time: ${gameState.timer}`
+    
+    scoreElement.textContent = `Score: ${gameState.score}`;
+    timerElement.textContent = `Time: ${gameState.timer}`;
 }
 
 function advanceTurn() {
@@ -148,14 +153,15 @@ function advanceTurn() {
 }
 
 function gameLoop() {
-    renderTimer();
     gameState.timer--;
     if (gameState.timer < 0) {
         advanceTurn();
+        renderShop();
     }
+    renderUI();
 }
 
-// Inventory
+// Inventory & Shop
 function renderInventory() {
     const inventoryDisplay = document.getElementById('inventory-display');
     inventoryDisplay.innerHTML = '';
@@ -179,6 +185,38 @@ function handleInventoryClick(index) {
     renderInventory();
 }
 
+function handleBuyPlant(plantType) {
+    const plant = plantData[plantType];
+    if (gameState.score >= plant.cost) {
+        gameState.score -= plant.cost;
+        gameState.inventory.push({ ...plant });
+
+        renderShop();
+        renderInventory();
+        renderUI();
+    } else {
+        alert('not enough points')
+    }
+}
+
+function renderShop() {
+    const shopDisplay = document.getElementById('shop-display');
+    shopDisplay.innerHTML = '';
+    for (const plantType in plantData) {
+        const plant = plantData[plantType];
+        const plantElement = document.createElement('div');
+        plantElement.className = 'shop-item';
+        plantElement.textContent = `${plant.emoji} ${plant.name} ${plant.flag} (Cost: ${plant.cost})`;
+
+        if (gameState.score <plant.cost) {
+            plantElement.classList.add('disabled');
+        } else {
+            plantElement.addEventListener('click', () => handleBuyPlant(plantType));
+        }
+
+        shopDisplay.appendChild(plantElement);
+    }
+}
 
 
 setInterval(gameLoop, 1000);

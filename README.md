@@ -40,7 +40,7 @@
 -   [ ] **3. Sun & Shadow:** Code the sun's rotation and the shadow-casting logic.
 -   [x] **4. Plant System:** Create the data structure for plants and a simple inventory.
 -   [ ] **5. Scoring Logic:** Implement pathfinding for the gardener and the main scoring function.
--   [ ] **6. Shop System:** Build a minimal UI to buy the 3 starter plants.
+-   [x] **6. Shop System:** Build a minimal UI to buy the 3 starter plants.
 
 ---
 
