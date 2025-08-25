@@ -50,3 +50,9 @@
 * More plants with unique symbiotic or invasive relationships.
 * Multiple levels with different layouts and obstacles.
 * A "Challenge Mode" with specific objectives.
+
+---
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE.txt).
